@@ -1,0 +1,9 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/product-service
+  jpa:
+    open-in-view: false
+
+server:
+  port: 8080
