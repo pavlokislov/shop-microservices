@@ -19,9 +19,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OrderService {
 
-    private static final String INVENTORY_URI = "http://localhost:8082/api/inventory";
+    private static final String INVENTORY_URI = "http://inventory-service/api/inventory";
     private final OrderRepository orderRepository;
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
     public void placeOrder(final OrderRequest orderRequest) {
         Order order = new Order();
@@ -31,7 +31,8 @@ public class OrderService {
 
         order.setOrderListItemsList(orderLineItems);
 
-        Boolean result = webClient.get()
+        Boolean result = webClientBuilder.build()
+                .get()
                 .uri(INVENTORY_URI,
                         uriBuilder -> uriBuilder.queryParam("skuCode", getSkuCodes(orderLineItems)).build())
                 .retrieve()
