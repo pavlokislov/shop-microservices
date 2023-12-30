@@ -5,9 +5,13 @@ spring:
     username: root
     password: root
   jpa:
+    properties:
+      hibernate:
+        format_sql: true
     open-in-view: false
     hibernate:
       ddl-auto: update
+    show-sql: true
 
 server:
   port: 8082

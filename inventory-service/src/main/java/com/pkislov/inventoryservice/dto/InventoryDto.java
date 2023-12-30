@@ -6,7 +6,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InventoryRequest {
+public class InventoryDto {
 
     @NonNull
     private String skuCode;
