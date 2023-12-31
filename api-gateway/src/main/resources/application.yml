@@ -24,6 +24,15 @@ spring:
         id: discovery-server-static
         uri: http://localhost:8761
         predicates[0]: Path=/eureka/**
+  security:
+    user:
+      name: eureka
+      password: password
+    oauth2:
+      resourceServer:
+        jwt:
+          issuer-uri: http://localhost:8181/realms/shop-microservices-realm
+
 
 server:
   port: 8080
@@ -31,7 +40,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka:password@localhost:8761/eureka/
 
 logging:
   level:
