@@ -18,3 +18,40 @@ eureka:
   client:
     service-url:
       defaultZone: http://eureka:password@localhost:8761/eureka/
+
+management:
+  endpoint:
+   health:
+     show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  health:
+    circuitBreakers:
+      enabled: true
+
+#Resilinece4j Properties
+resilience4j:
+  circuitBreaker:
+    instances:
+      inventory:
+        automaticTransitionFromOpenToHalfOpenEnabled: 'true'
+        failureRateThreshold: '50'
+        slidingWindowType: COUNT_BASED
+        event-consumer-buffer-size: '10'
+        registerHealthIndicator: 'true'
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: '3'
+        slidingWindowSize: '5'
+  timeLimiter:
+    instances:
+      inventory:
+        timeout-duration: 3s
+  retry:
+    instances:
+      inventory:
+        wait-duration: 5s
+        max-attempts: '3'
+
+
