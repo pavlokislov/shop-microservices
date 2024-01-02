@@ -1,11 +1,11 @@
 spring:
   application:
     name: order-service
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/order-service
-    username: root
-    password: root
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/order-service
+#    username: root
+#    password: root
   jpa:
     open-in-view: false
     hibernate:

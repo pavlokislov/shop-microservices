@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://postgres:5432/inventory-service
+    password: postgres
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+management:
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411
+server:
+  port: '8080'
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:password@discovery-server:8761/eureka

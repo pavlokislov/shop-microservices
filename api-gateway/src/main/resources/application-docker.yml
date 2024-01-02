@@ -1,0 +1,17 @@
+management:
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411
+server:
+  port: '8080'
+spring:
+  security:
+    oauth2:
+      resourceServer:
+        jwt:
+          issuer-uri: http://keycloak:8080/realms/shop-microservices-realm
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:password@discovery-server:8761/eureka
