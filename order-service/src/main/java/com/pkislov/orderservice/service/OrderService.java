@@ -2,6 +2,7 @@ package com.pkislov.orderservice.service;
 
 import com.pkislov.orderservice.dto.OrderLineItemsDto;
 import com.pkislov.orderservice.dto.OrderRequest;
+import com.pkislov.orderservice.event.OrderPlacedEvent;
 import com.pkislov.orderservice.exception.ProductIsNotInStock;
 import com.pkislov.orderservice.model.Order;
 import com.pkislov.orderservice.model.OrderLineItems;
@@ -10,7 +11,9 @@ import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
@@ -19,12 +22,14 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class OrderService {
 
     private static final String INVENTORY_URI = "http://inventory-service/api/inventory";
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
     private final ObservationRegistry observationRegistry;
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     public String placeOrder(final OrderRequest orderRequest) {
         Order order = new Order();
@@ -48,6 +53,7 @@ public class OrderService {
 
             if (Boolean.TRUE.equals(result)) {
                 orderRepository.save(order);
+                kafkaTemplate.send("notificationTopic", new OrderPlacedEvent(order.getOrderNumber()));
                 return "Order Placed Successfully";
             } else {
                 throw new ProductIsNotInStock("Product is not in stock, please try again later");

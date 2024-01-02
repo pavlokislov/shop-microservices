@@ -10,6 +10,19 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: update
+  kafka:
+    producer:
+      properties:
+        spring:
+          json:
+            type:
+              mapping: event:com.pkislov.orderservice.event.OrderPlacedEvent
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    template:
+      default-topic: notificationTopic
+    bootstrap-servers: localhost:9092
+
 
 server:
   port: 0
@@ -54,7 +67,7 @@ resilience4j:
   timeLimiter:
     instances:
       inventory:
-        timeout-duration: 3s
+        timeout-duration: 25s
   retry:
     instances:
       inventory:
