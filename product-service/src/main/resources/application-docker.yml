@@ -11,6 +11,7 @@ server:
 spring:
   data:
     mongodb:
+      auto-index-creation: true
       uri: mongodb://mongo:27017/product-service
   jpa:
     hibernate:

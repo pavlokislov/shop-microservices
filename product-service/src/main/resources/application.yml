@@ -4,6 +4,7 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/product-service
+      auto-index-creation: true
   jpa:
     open-in-view: false
 

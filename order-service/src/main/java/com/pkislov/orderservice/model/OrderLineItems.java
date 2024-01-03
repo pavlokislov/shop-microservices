@@ -19,10 +19,13 @@ public class OrderLineItems {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @Column(nullable = false)
+
+    @Column(name = "sku_code", nullable = false)
     private String skuCode;
+
     @Column(nullable = false)
     private BigDecimal price;
+
     @Column(nullable = false)
     private Integer quantity;
 

@@ -16,4 +16,6 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     @Query("SELECT new com.pkislov.inventoryservice.dto.InventoryDto(i.skuCode, i.quantity) FROM Inventory i")
     List<InventoryDto> findBySkuCodeIn(List<String> skuCode);
 
+
+    boolean deleteBySkuCode(String skuCode);
 }

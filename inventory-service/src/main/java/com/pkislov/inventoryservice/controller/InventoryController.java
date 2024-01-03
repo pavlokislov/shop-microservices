@@ -4,7 +4,9 @@ import com.pkislov.inventoryservice.dto.InventoryDto;
 import com.pkislov.inventoryservice.service.InventoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -16,13 +18,23 @@ public class InventoryController {
     private final InventoryService inventoryService;
 
     @GetMapping()
-    public boolean isInStock(@RequestParam("skuCode") List<String> skuCode) {
-        return inventoryService.isInStock(skuCode);
+    @ResponseStatus(HttpStatus.OK)
+    public boolean isInStock(@RequestParam("skuCode") List<String> skuCodes) {
+        return inventoryService.isInStock(skuCodes);
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public void putInInventory(@RequestBody InventoryDto inventoryRequest) {
-        inventoryService.putInInventory(inventoryRequest);
+    public void saveInInventory(@RequestBody @Validated InventoryDto inventoryRequest) {
+        inventoryService.saveInInventory(inventoryRequest);
+    }
+
+    @DeleteMapping()
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteInInventory(@RequestParam("skuCode") String skuCode) {
+        if (!inventoryService.deleteInInventory(skuCode)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Provided SkuCode not found in Inventory");
+        }
     }
 }
