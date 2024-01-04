@@ -2,9 +2,9 @@ package com.pkislov.inventoryservice.controller;
 
 import com.pkislov.inventoryservice.dto.InventoryDto;
 import com.pkislov.inventoryservice.service.InventoryService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,7 +25,7 @@ public class InventoryController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveInInventory(@RequestBody @Validated InventoryDto inventoryRequest) {
+    public void saveInInventory(@RequestBody @Valid InventoryDto inventoryRequest) {
         inventoryService.saveInInventory(inventoryRequest);
     }
 

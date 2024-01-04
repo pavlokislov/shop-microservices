@@ -25,6 +25,7 @@ import java.util.UUID;
 @Transactional
 public class OrderService {
 
+    private static final String PRODUCT_IS_NOT_IN_STUCK_ERROR = "Product is not in stock, please try again later";
     private static final String INVENTORY_URI = "http://inventory-service/api/inventory";
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
@@ -39,14 +40,15 @@ public class OrderService {
 
         order.setOrderListItemsList(orderLineItems);
 
-        Observation inventoryServiceObservation = Observation.createNotStarted("inventory-service-lookup",
-                this.observationRegistry);
+        Observation inventoryServiceObservation = Observation.createNotStarted("inventory-service-lookup", this.observationRegistry);
         inventoryServiceObservation.lowCardinalityKeyValue("call", "inventory-service");
+
         return inventoryServiceObservation.observe(() -> {
             Boolean result = webClientBuilder.build()
                     .get()
                     .uri(INVENTORY_URI,
-                            uriBuilder -> uriBuilder.queryParam("skuCode", getSkuCodes(orderLineItems)).build())
+                            uriBuilder -> uriBuilder.queryParam("skuCode", getSkuCodes(orderLineItems))
+                                    .build())
                     .retrieve()
                     .bodyToMono(Boolean.class)
                     .block();
@@ -56,7 +58,7 @@ public class OrderService {
                 kafkaTemplate.send("notificationTopic", new OrderPlacedEvent(order.getOrderNumber()));
                 return "Order Placed Successfully";
             } else {
-                throw new ProductIsNotInStock("Product is not in stock, please try again later");
+                throw new ProductIsNotInStock(PRODUCT_IS_NOT_IN_STUCK_ERROR);
             }
         });
     }

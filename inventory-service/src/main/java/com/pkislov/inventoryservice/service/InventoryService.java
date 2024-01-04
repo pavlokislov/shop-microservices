@@ -23,7 +23,7 @@ public class InventoryService {
     }
 
     public void saveInInventory(final InventoryDto inventoryRequest) {
-        if (!isSkuCodeUnique(inventoryRequest)) {
+        if (isSkuCodeDuplicated(inventoryRequest)) {
             throw new DuplicatedSkuCodeException(format(DUPLICATED_SKU_CODE_ERROR, inventoryRequest.getSkuCode()));
         }
 
@@ -32,7 +32,7 @@ public class InventoryService {
         inventoryRepository.save(inventory);
     }
 
-    private boolean isSkuCodeUnique(InventoryDto inventoryRequest) {
+    private boolean isSkuCodeDuplicated(InventoryDto inventoryRequest) {
         return inventoryRepository.findAll().stream().map(Inventory::getSkuCode)
                 .anyMatch(skuCode -> skuCode.equals(inventoryRequest.getSkuCode()));
     }
