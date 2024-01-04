@@ -31,7 +31,7 @@ services:
       - ./postgres-inventory:/data/postgres
     ports:
       - "5432:5432"
-    restart: unless-stopped
+    restart: always
 
   ## Mongo Docker Compose Config
   mongo:
@@ -174,7 +174,7 @@ services:
   ## Notification-Service Docker Compose Config
   notification-service:
     container_name: notification-service
-    image: saiupadhyayula007/notification-service:latest
+    image: pk12pk/notification-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
